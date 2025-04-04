@@ -15,6 +15,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -25,8 +29,8 @@ jobs:
       - name: Checkout repository content
         uses: actions/checkout@v4
         with:
-          submodules: true
-          fetch-depth: 0
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -34,10 +38,26 @@ jobs:
           hugo-version: '0.144.0'
           extended: true
 
+      - name: Install Node.js dependencies
+        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
+
+      - name: Cache Hugo resources
+        uses: actions/cache@v3
+        with:
+          path: /tmp/hugo_cache
+          key: hugo-${{ github.run_id }}
+          restore-keys: |
+            hugo-
+
       - name: Build with Hugo
-        run: hugo --minify
+        env:
+          HUGO_ENVIRONMENT: production
+          HUGO_CACHEDIR: /tmp/hugo_cache
+        run: |
+          hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Setup Pages
+        id: pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
