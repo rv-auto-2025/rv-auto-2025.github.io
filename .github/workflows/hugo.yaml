@@ -29,8 +29,8 @@ jobs:
       - name: Checkout repository content
         uses: actions/checkout@v4
         with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          submodules: true
+          fetch-depth: 0
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -49,6 +49,10 @@ jobs:
           restore-keys: |
             hugo-
 
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
@@ -56,16 +60,11 @@ jobs:
         run: |
           hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
-
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
-
+        uses: actions/deploy-pages@v4
