@@ -1,0 +1,70 @@
+# name: Deploy Hugo site to Pages
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# permissions:
+#   contents: read
+#   pages: write
+#   id-token: write
+
+# jobs:
+#   build-deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository content
+#         uses: actions/checkout@v4
+
+#       - name: Install Hugo CLI
+#         run: |
+#           wget https://github.com/gohugoio/hugo/releases/download/v0.144.0/hugo_extended_0.144.0_Linux-64bit.deb \
+#           && sudo dpkg -i hugo_extended_0.144.0_Linux-64bit.deb
+
+#       - name: Build with Hugo
+#         run: hugo --minify
+
+#       - name: Deploy to GitHub Pages
+#         uses: actions/deploy-pages@v2
+#         with:
+#           path: ./public
+
+name: Deploy Hugo site to Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository content
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.144.0'
+          extended: true
+
+      - name: Build with Hugo
+        run: hugo --minify
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
+        with:
+          path: ./public
