@@ -1,0 +1,7 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'RV 2025 Forester le 2851 sle 4*4'
+theme = 'cleanwhite'
+
+[params]
+  header_image = "img/bg.webp"
