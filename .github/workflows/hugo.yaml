@@ -10,14 +10,11 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write  # Critical fix for artifact tracking
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
-
-defaults:
-  run:
-    shell: bash
+  cancel-in-progress: true  # Better for concurrent deployments
 
 jobs:
   build-and-deploy:
@@ -26,11 +23,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout repository content
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          submodules: recursive  # Fetch Hugo themes properly
-          fetch-depth: 0         # Fetch all history for .GitInfo and .Lastmod
+          submodules: recursive
+          fetch-depth: 0
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -38,37 +35,24 @@ jobs:
           hugo-version: '0.117.0'
           extended: true
 
-      - name: Install Node.js dependencies
-        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
-
-      - name: Cache Hugo resources
-        uses: actions/cache@v3
-        with:
-          path: /tmp/hugo_cache
-          key: hugo-${{ runner.os }}-${{ hashFiles('**/*.md') }}
-          restore-keys: |
-            hugo-${{ runner.os }}-
-
-      - name: Build with Hugo
+      - name: Build site
         env:
           HUGO_ENVIRONMENT: production
-          HUGO_CACHEDIR: /tmp/hugo_cache
         run: |
-          hugo --minify --baseURL "${{ github.event.repository.html_url }}"
+          hugo --minify --baseURL "https://rv-auto-2025.github.io/"  # Use actual Pages URL
 
-      - name: Setup Pages
-        id: pages
+      - name: Verify build output
+        run: ls -la public  # Ensure public directory exists
+
+      - name: Configure Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
+          retention-days: 1  # Prevent version conflicts
 
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: Deploy
         uses: actions/deploy-pages@v3
-
-      - name: Debug Outputs (optional)
-        run: |
-          echo "Page URL from deployment step -> ${{ steps.deployment.outputs.page_url }}"
+        timeout-minutes: 5  # Prevent API timeout
