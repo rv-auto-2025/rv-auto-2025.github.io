@@ -29,13 +29,13 @@ jobs:
       - name: Checkout repository content
         uses: actions/checkout@v4
         with:
-          submodules: true
-          fetch-depth: 0
+          submodules: recursive  # Fetch Hugo themes properly
+          fetch-depth: 0         # Fetch all history for .GitInfo and .Lastmod
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.144.0'
+          hugo-version: '0.117.0'
           extended: true
 
       - name: Install Node.js dependencies
@@ -45,26 +45,30 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/hugo_cache
-          key: hugo-${{ github.run_id }}
+          key: hugo-${{ runner.os }}-${{ hashFiles('**/*.md') }}
           restore-keys: |
-            hugo-
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
+            hugo-${{ runner.os }}-
 
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
           HUGO_CACHEDIR: /tmp/hugo_cache
         run: |
-          hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+          hugo --minify --baseURL "${{ github.event.repository.html_url }}"
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v3
+
+      - name: Debug Outputs (optional)
+        run: |
+          echo "Page URL from deployment step -> ${{ steps.deployment.outputs.page_url }}"
