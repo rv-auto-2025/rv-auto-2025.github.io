@@ -10,11 +10,10 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  actions: write  # Critical fix for artifact tracking
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true  # Better for concurrent deployments
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
@@ -38,11 +37,10 @@ jobs:
       - name: Build site
         env:
           HUGO_ENVIRONMENT: production
-        run: |
-          hugo --minify --baseURL "https://rv-auto-2025.github.io/"  # Use actual Pages URL
+        run: hugo --minify --baseURL "https://rv-auto-2025.github.io/"
 
       - name: Verify build output
-        run: ls -la public  # Ensure public directory exists
+        run: ls -la public
 
       - name: Configure Pages
         uses: actions/configure-pages@v4
@@ -51,8 +49,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
-          retention-days: 1  # Prevent version conflicts
 
       - name: Deploy
         uses: actions/deploy-pages@v3
-        timeout-minutes: 5  # Prevent API timeout
