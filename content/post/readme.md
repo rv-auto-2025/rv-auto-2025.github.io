@@ -6,8 +6,8 @@ date:       2025-04-04
 author:     ""
 ---
 
-![screenshot](/img/1.jpg)
 
+{{< youtube gjkC189pdU8 >}}
 
 # Specifications
 2025 Forest River Forester LE 2851 SLE 4x4 converted with 7.3 V8 Godzilla engine. This RV has been converted to an overland vehicle with electronic 4x4 switch with Fox 2.0 reservoir shocks all across. 
@@ -40,7 +40,7 @@ author:     ""
 
 Looking for an overland vehicle for less, this is proven RV.
 
-
+![screenshot](/img/1.jpg)
 ![screenshot](/img/2.jpg)
 ![screenshot](/img/3.jpg)
 ![screenshot](/img/4.jpg)
