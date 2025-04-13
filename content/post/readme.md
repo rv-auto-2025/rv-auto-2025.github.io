@@ -1,22 +1,23 @@
 ---
 layout:     post
-title:      "RV 2025 Forest River forester le 2851 sle 4*4"
-subtitle:   "Freedom to Explore, Space to Live: The Ultimate Adventure Companion"
+title:      "2025 Forester Forest River LE 2851 SLE 4X4"
+subtitle:   "Freedom to explore in luxury and go places with a much capable overland expedition vehicle"
 date:       2025-04-04
 author:     ""
 ---
 
 ### Click here for more images
 
-{{< youtube gjkC189pdU8 >}}
+{{< youtube _Hn65T1vm0M >}}
 
 # Specifications
 2025 Forest River Forester LE 2851 SLE 4x4 converted with 7.3 V8 Godzilla engine. This RV has been converted to an overland vehicle with electronic 4x4 switch with Fox 2.0 reservoir shocks all across. 
 
 ### Price: $185,000.00
 
-### Contact: [Link](https://www.facebook.com/share/12MPyMSKAgD/?mibextid=wwXIfr)
+### Email: gopipotluri@gmail.com
 
+### Phone: +1 309-532-3704
 
 ### Features
 
